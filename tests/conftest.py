@@ -19,3 +19,14 @@ def tests_clubs(mocker):
         }
     ]
     mocker.patch('server.clubs', clubs)
+
+@pytest.fixture(autouse=True)
+def test_competitions(mocker):
+    competitions = [
+        {
+            "name": "name",
+            "date": "2030-03-27 10:00:00",
+            "numberOfPlaces": "5"
+        }
+    ]
+    mocker.patch('server.competitions', competitions)
