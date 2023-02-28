@@ -9,12 +9,13 @@ def client():
     with app.test_client() as client:
         yield client
 
-@pytest.fixture
-def tests_clubs():
-    return [
+@pytest.fixture(autouse=True)
+def tests_clubs(mocker):
+    clubs = [
         {
             "name": "name",
             "email": "test@test.co",
             "points": "1"
         }
     ]
+    mocker.patch('server.clubs', clubs)
