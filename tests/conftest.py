@@ -16,6 +16,11 @@ def tests_clubs(mocker):
             "name": "name",
             "email": "test@test.co",
             "points": "1"
+        },
+        {
+            "name": "name2",
+            "email": "test@test.co",
+            "points": "13"
         }
     ]
     mocker.patch('server.clubs', clubs)
@@ -27,6 +32,11 @@ def test_competitions(mocker):
             "name": "name",
             "date": "2030-03-27 10:00:00",
             "numberOfPlaces": "5"
+        },
+        {
+            "name": "name2",
+            "date": "2030-03-27 10:00:00",
+            "numberOfPlaces": "15"
         }
     ]
     mocker.patch('server.competitions', competitions)
