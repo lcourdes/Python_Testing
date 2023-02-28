@@ -56,6 +56,9 @@ def create_app(config):
         if placesRequired > 12:
             flash('You can\'t purchase more than 12 places.')
             return render_template('booking.html', club=club, competition=competition)
+        if placesRequired > int(competition['numberOfPlaces']):
+            flash('You can\'t purchase more than available places.')
+            return render_template('booking.html', club=club, competition=competition)
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club, competitions=competitions)
