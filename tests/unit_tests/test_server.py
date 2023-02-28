@@ -36,3 +36,7 @@ class TestPurchasePlaces:
         assert response.status_code == 200
         assert "You can&#39;t purchase more than 12 places." in response.data.decode()
     
+    def test_should_not_purchase_more_than_available_places(self, client):
+        response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name', 'places': '6'})
+        assert response.status_code == 200
+        assert "You can&#39;t purchase more than available places." in response.data.decode()
