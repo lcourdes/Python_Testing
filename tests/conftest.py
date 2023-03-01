@@ -19,7 +19,7 @@ def tests_clubs(mocker):
         },
         {
             "name": "name2",
-            "email": "test@test.co",
+            "email": "test2@test.co",
             "points": "13"
         }
     ]

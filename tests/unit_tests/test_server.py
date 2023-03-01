@@ -41,6 +41,20 @@ class TestPurchasePlaces:
         assert response.status_code == 200
         assert "You can&#39;t purchase more than available places." in response.data.decode()
 
+    def test_should_redeem_correct_clubs_points(self, client):
+        response = client.post('/showSummary', data={'email': 'test2@test.co'})
+        assert 'Points available: 13' in response.data.decode()
+        response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name2', 'places': '1'})
+        assert response.status_code == 200
+        assert 'Points available: 12' in response.data.decode()
+    
+    def test_should_redeem_correct_competitions_points(self, client):
+        response = client.post('/showSummary', data={'email': 'test2@test.co'})
+        assert 'Number of Places: 15' in response.data.decode()
+        response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name2', 'places': '1'})
+        assert response.status_code == 200
+        assert 'Number of Places: 14' in response.data.decode()
+
 
 class TestBook:
     def test_should_return_code_ok(self, client):
