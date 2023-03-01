@@ -80,3 +80,8 @@ class TestBook:
         response = client.get('/book/past event/name')
         assert 'This is a past event. Please choose a future competition.' in response.data.decode()
         assert response.status_code == 200
+
+def test_logout_should_return_code_redirect(client):
+    response = client.get('/logout')
+    assert response.status_code == 302
+    assert 'target URL: <a href="/">/</a>' in response.data.decode()
