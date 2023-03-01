@@ -37,6 +37,11 @@ def test_competitions(mocker):
             "name": "name2",
             "date": "2030-03-27 10:00:00",
             "numberOfPlaces": "15"
+        },
+        {
+            "name": "past event",
+            "date": "1900-03-27 10:00:00",
+            "numberOfPlaces": "15"
         }
     ]
     mocker.patch('server.competitions', competitions)
