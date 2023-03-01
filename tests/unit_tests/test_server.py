@@ -1,6 +1,10 @@
 import pytest
 
 
+def test_index_should_return_code_ok(client):
+    response = client.get('/')
+    assert response.status_code == 200
+
 class TestShowSummary:
     def setup_method(self):
         self.valid_email = "test@test.co"
