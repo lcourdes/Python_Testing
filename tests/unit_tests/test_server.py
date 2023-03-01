@@ -40,3 +40,25 @@ class TestPurchasePlaces:
         response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name', 'places': '6'})
         assert response.status_code == 200
         assert "You can&#39;t purchase more than available places." in response.data.decode()
+
+
+class TestBook:
+    def test_should_return_code_ok(self, client):
+        response = client.get('/book/name/name')
+        assert '<form action="/purchasePlaces" method="post">' in response.data.decode()
+        assert response.status_code == 200
+        
+    def test_no_competition_found(self, client):
+        response = client.get('/book/notaname/name')
+        assert 'Something went wrong-please try again' in response.data.decode()
+        assert response.status_code == 200
+
+    def test_no_club_found(self, client):
+        response = client.get('/book/name/notaname')
+        assert 'Something went wrong-please login' in response.data.decode()
+        assert response.status_code == 200
+    
+    def test_no_booking_for_past_event(self, client):
+        response = client.get('/book/past event/name')
+        assert 'This is a past event. Please choose a future competition.' in response.data.decode()
+        assert response.status_code == 200
