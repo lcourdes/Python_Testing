@@ -27,3 +27,18 @@ class MyTest(LiveServerTestCase):
         element = chrome_driver.find_element(By.TAG_NAME, 'h1')
         assert element.text == 'Welcome to the GUDLFT Registration Portal!'
     
+    def login(self, email):
+        chrome_driver.get("http://127.0.0.1:5050")
+        email_field = chrome_driver.find_element(By.NAME, 'email')
+        email_field.send_keys(email)
+        email_field.send_keys(Keys.ENTER)
+    
+    def test_login_no_booking_in_past_event(self):
+        self.login('test@test.co')
+        element = chrome_driver.find_element(By.TAG_NAME, 'h2')
+        assert element.text == 'Welcome, test@test.co'
+
+        book_link = chrome_driver.find_elements(By.LINK_TEXT, 'Book Places')
+        book_link[2].click()
+        element = chrome_driver.find_element(By.TAG_NAME, 'li')
+        assert element.text == 'This is a past event. Please choose a future competition.'
