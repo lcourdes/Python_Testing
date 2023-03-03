@@ -15,7 +15,6 @@ def loadCompetitions():
         return listOfCompetitions
 
 def addAlreadyBoughtPlaces(competitions):
-    print('ici')
     for competition in competitions:
         competition['alreadyBoughtPlaces'] = {}
     return competitions
