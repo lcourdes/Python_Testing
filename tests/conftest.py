@@ -45,6 +45,12 @@ def test_competitions(mocker):
             "date": "1900-03-27 10:00:00",
             "numberOfPlaces": "15",
             "alreadyBoughtPlaces": {},
+        },
+        {
+            "name": "name3",
+            "date": "2023-03-27 10:00:00",
+            "numberOfPlaces": "15",
+            "alreadyBoughtPlaces": {"test2@test.co": 11},
         }
     ]
     mocker.patch('server.competitions', competitions)
