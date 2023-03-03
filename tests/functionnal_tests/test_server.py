@@ -56,7 +56,7 @@ class MyTest(LiveServerTestCase):
         places.send_keys('1')
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert element.text == 'Great-booking complete!'
+        assert 'Great-booking complete!' in element.text
 
     def test_login_book_places_no_success_not_enough_club_points(self):
         self.login('test@test.co')
@@ -102,6 +102,31 @@ class MyTest(LiveServerTestCase):
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
         assert element.text == 'You can\'t purchase more than available places.'
+    
+    def test_login_book_places_success_book_places_no_success_more_than_12_places_in_total(self):
+        self.login('test2@test.co')
+        element = chrome_driver.find_element(By.TAG_NAME, 'h2')
+        assert element.text == 'Welcome, test2@test.co'
+
+        book_link = chrome_driver.find_elements(By.LINK_TEXT, 'Book Places')
+        book_link[1].click()
+        element = chrome_driver.find_element(By.TAG_NAME, 'h2')
+        assert element.text == 'name2'
+        places = chrome_driver.find_element(By.NAME, 'places')
+        places.send_keys('3')
+        places.send_keys(Keys.ENTER)
+        element = chrome_driver.find_element(By.TAG_NAME, 'li')
+        assert 'Great-booking complete!' in element.text
+
+        book_link = chrome_driver.find_elements(By.LINK_TEXT, 'Book Places')
+        book_link[1].click()
+        element = chrome_driver.find_element(By.TAG_NAME, 'h2')
+        assert element.text == 'name2'
+        places = chrome_driver.find_element(By.NAME, 'places')
+        places.send_keys('10')
+        places.send_keys(Keys.ENTER)
+        element = chrome_driver.find_element(By.TAG_NAME, 'li')
+        assert 'You can\'t purchase more than 12 places and you have already bought' in element.text
     
     def test_login_view_club_logout_view_club(self):
         self.login('test@test.co')
