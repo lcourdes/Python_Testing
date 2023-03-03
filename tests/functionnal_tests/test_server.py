@@ -103,3 +103,19 @@ class MyTest(LiveServerTestCase):
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
         assert element.text == 'You can\'t purchase more than available places.'
     
+    def test_login_view_club_logout_view_club(self):
+        self.login('test@test.co')
+        club_link = chrome_driver.find_element(By.LINK_TEXT, 'List of clubs')
+        club_link.click()
+        club_page = chrome_driver.find_element(By.TAG_NAME, 'th')
+        assert club_page.text == 'Clubs'
+
+        chrome_driver.back()
+        element = chrome_driver.find_element(By.TAG_NAME, 'h2')
+        assert element.text == 'Welcome, test@test.co'
+
+        logout = chrome_driver.find_element(By.LINK_TEXT, 'Logout')
+        logout.click()
+        chrome_driver.get("http://127.0.0.1:5050/clubs")
+        club_page = chrome_driver.find_element(By.TAG_NAME, 'th')
+        assert club_page.text == 'Clubs'
