@@ -1,4 +1,4 @@
-import pytest
+from server import addAlreadyBoughtPlaces, backUpBoughtPlaces
 
 
 def test_index_should_return_code_ok(client):
@@ -39,6 +39,11 @@ class TestPurchasePlaces:
         response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name2', 'places': '13'})
         assert response.status_code == 200
         assert "You can&#39;t purchase more than 12 places." in response.data.decode()
+    
+    def test_should_not_purchase_more_than_12_places_in_total(self, client):
+        response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name3', 'places': '2'})
+        assert response.status_code == 200
+        assert "You can&#39;t purchase more than 12 places and you have already bought" in response.data.decode()
     
     def test_should_not_purchase_more_than_available_places(self, client):
         response = client.post('/purchasePlaces', data={'club': 'name2', 'competition': 'name', 'places': '6'})
@@ -87,8 +92,50 @@ def test_logout_should_return_code_redirect(client):
     assert 'target URL: <a href="/">/</a>' in response.data.decode()
 
 
-class TestDisplayBoard:
-    def test_should_return_code_ok_no_login(self, client):
-        response = client.get('/clubs')
-        assert response.status_code == 200
-        assert '<th>Clubs</th>' in response.data.decode()
+def test_should_return_code_ok_no_login(client):
+    response = client.get('/clubs')
+    assert response.status_code == 200
+    assert '<th>Clubs</th>' in response.data.decode()
+
+def test_should_add_additional_key_to_competitions():
+    tested_competition = [
+        {
+            "name": "name",
+            "date": "2030-03-27 10:00:00",
+            "numberOfPlaces": "1",
+        }
+    ]
+    expected_results = [
+        {
+            "name": "name",
+            "date": "2030-03-27 10:00:00",
+            "numberOfPlaces": "1",
+            "alreadyBoughtPlaces": {},
+        }
+    ]
+    assert addAlreadyBoughtPlaces(tested_competition) == expected_results
+
+class TestBackUpBoughtPlaces:
+    def setup_method(self):
+        self.competition = {
+            "name": "name",
+            "date": "2030-03-27 10:00:00",
+            "numberOfPlaces": "10",
+            "alreadyBoughtPlaces": {},
+        }
+        self.club = {
+            "name": "name",
+            "email": "test@test.co",
+            "points": "6",
+        }
+
+    def test_should_add_club_history_to_competition_purchased(self):
+        expected_competition_value = {"test@test.co": 2}
+        testing_back_up = backUpBoughtPlaces(self.competition, self.club, 2)
+        assert testing_back_up["alreadyBoughtPlaces"]  == expected_competition_value
+    
+    def test_should_add_points_in_back_up(self):
+        self.competition["alreadyBoughtPlaces"] = {"test@test.co": 2}
+        expected_competition_value = {"test@test.co": 6}
+        testing_back_up = backUpBoughtPlaces(self.competition, self.club, 4)
+        assert testing_back_up["alreadyBoughtPlaces"] == expected_competition_value

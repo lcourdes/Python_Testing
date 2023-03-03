@@ -31,17 +31,26 @@ def test_competitions(mocker):
         {
             "name": "name",
             "date": "2030-03-27 10:00:00",
-            "numberOfPlaces": "5"
+            "numberOfPlaces": "5",
+            "alreadyBoughtPlaces": {},
         },
         {
             "name": "name2",
             "date": "2030-03-27 10:00:00",
-            "numberOfPlaces": "15"
+            "numberOfPlaces": "15",
+            "alreadyBoughtPlaces": {},
         },
         {
             "name": "past event",
             "date": "1900-03-27 10:00:00",
-            "numberOfPlaces": "15"
+            "numberOfPlaces": "15",
+            "alreadyBoughtPlaces": {},
+        },
+        {
+            "name": "name3",
+            "date": "2023-03-27 10:00:00",
+            "numberOfPlaces": "15",
+            "alreadyBoughtPlaces": {"test2@test.co": 11},
         }
     ]
     mocker.patch('server.competitions', competitions)

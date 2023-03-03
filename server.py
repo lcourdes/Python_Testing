@@ -14,7 +14,20 @@ def loadCompetitions():
         listOfCompetitions = json.load(comps)['competitions']
         return listOfCompetitions
 
-competitions = loadCompetitions()
+def addAlreadyBoughtPlaces(competitions):
+    for competition in competitions:
+        competition['alreadyBoughtPlaces'] = {}
+    return competitions
+
+def backUpBoughtPlaces(competition, club, boughtPlaces):
+    if competition['alreadyBoughtPlaces'].get(club['email']):
+        competition['alreadyBoughtPlaces'][club['email']] = int(competition['alreadyBoughtPlaces'][club['email']]) + int(boughtPlaces)
+        return competition
+    competition['alreadyBoughtPlaces'][club['email']] = int(boughtPlaces)
+    return competition
+
+loadedCompetitions = loadCompetitions()
+competitions = addAlreadyBoughtPlaces(loadedCompetitions)
 clubs = loadClubs()
 
 def create_app(config):
@@ -65,12 +78,18 @@ def create_app(config):
         if placesRequired > 12:
             flash('You can\'t purchase more than 12 places.')
             return render_template('booking.html', club=club, competition=competition)
+        if competition['alreadyBoughtPlaces'].get(club['email']):
+            alreadyBoughtPlaces = competition['alreadyBoughtPlaces'].get(club['email'])
+            if placesRequired + int(alreadyBoughtPlaces) > 12:
+                flash(f'You can\'t purchase more than 12 places and you have already bought {alreadyBoughtPlaces}')
+                return render_template('booking.html', club=club, competition=competition)
         if placesRequired > int(competition['numberOfPlaces']):
             flash('You can\'t purchase more than available places.')
             return render_template('booking.html', club=club, competition=competition)
         competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+        competition = backUpBoughtPlaces(competition, club, placesRequired)
         club['points'] = int(club['points']) - placesRequired
-        flash('Great-booking complete!')
+        flash(f'Great-booking complete! You just bought {placesRequired} places.')
         return render_template('welcome.html', club=club, competitions=competitions)
 
     @app.route('/clubs')
