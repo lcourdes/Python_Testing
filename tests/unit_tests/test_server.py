@@ -87,8 +87,7 @@ def test_logout_should_return_code_redirect(client):
     assert 'target URL: <a href="/">/</a>' in response.data.decode()
 
 
-class TestDisplayBoard:
-    def test_should_return_code_ok_no_login(self, client):
-        response = client.get('/clubs')
-        assert response.status_code == 200
-        assert '<th>Clubs</th>' in response.data.decode()
+def test_should_return_code_ok_no_login(self, client):
+    response = client.get('/clubs')
+    assert response.status_code == 200
+    assert '<th>Clubs</th>' in response.data.decode()
