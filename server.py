@@ -30,7 +30,7 @@ loadedCompetitions = loadCompetitions()
 competitions = addAlreadyBoughtPlaces(loadedCompetitions)
 clubs = loadClubs()
 
-def create_app(config):
+def create_app(config={}):
     app = Flask(__name__)
     app.config.from_object(config)
     app.secret_key = 'something_special'
