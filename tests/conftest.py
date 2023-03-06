@@ -9,6 +9,7 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 @pytest.fixture(autouse=True)
 def tests_clubs(mocker):
     clubs = [
@@ -24,6 +25,7 @@ def tests_clubs(mocker):
         }
     ]
     mocker.patch('server.clubs', clubs)
+
 
 @pytest.fixture(autouse=True)
 def test_competitions(mocker):

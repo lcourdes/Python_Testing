@@ -6,14 +6,16 @@ from webdriver_manager.chrome import ChromeDriverManager
 from flask_testing import LiveServerTestCase
 from server import create_app
 
-chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+chrome_driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()))
+
 
 class MyTest(LiveServerTestCase):
     def create_app(self):
         app = create_app({"TESTING": True})
         app.config['LIVESERVER_PORT'] = 5050
         return app
-      
+
     def test_login_logout(self):
         chrome_driver.get("http://127.0.0.1:5050")
         email_field = chrome_driver.find_element(By.NAME, 'email')
@@ -26,13 +28,13 @@ class MyTest(LiveServerTestCase):
         logout.click()
         element = chrome_driver.find_element(By.TAG_NAME, 'h1')
         assert element.text == 'Welcome to the GUDLFT Registration Portal!'
-    
+
     def login(self, email):
         chrome_driver.get("http://127.0.0.1:5050")
         email_field = chrome_driver.find_element(By.NAME, 'email')
         email_field.send_keys(email)
         email_field.send_keys(Keys.ENTER)
-    
+
     def test_login_no_booking_in_past_event(self):
         self.login('test@test.co')
         element = chrome_driver.find_element(By.TAG_NAME, 'h2')
@@ -41,7 +43,8 @@ class MyTest(LiveServerTestCase):
         book_link = chrome_driver.find_elements(By.LINK_TEXT, 'Book Places')
         book_link[2].click()
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert element.text == 'This is a past event. Please choose a future competition.'
+        assert element.text == 'This is a past event. Please choose a future\
+                                competition.'
 
     def test_login_book_places_success(self):
         self.login('test2@test.co')
@@ -87,7 +90,7 @@ class MyTest(LiveServerTestCase):
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
         assert element.text == 'You can\'t purchase more than 12 places.'
-    
+
     def test_login_book_places_no_success_more_than_available_places(self):
         self.login('test2@test.co')
         element = chrome_driver.find_element(By.TAG_NAME, 'h2')
@@ -101,8 +104,9 @@ class MyTest(LiveServerTestCase):
         places.send_keys('6')
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert element.text == 'You can\'t purchase more than available places.'
-    
+        assert element.text == 'You can\'t purchase more than available \
+            places.'
+
     def test_login_book_places_success_book_places_no_success_more_than_12_places_in_total(self):
         self.login('test2@test.co')
         element = chrome_driver.find_element(By.TAG_NAME, 'h2')
@@ -126,8 +130,9 @@ class MyTest(LiveServerTestCase):
         places.send_keys('10')
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert 'You can\'t purchase more than 12 places and you have already bought' in element.text
-    
+        assert 'You can\'t purchase more than 12 places and you have already\
+            bought' in element.text
+
     def test_login_view_club_logout_view_club(self):
         self.login('test@test.co')
         club_link = chrome_driver.find_element(By.LINK_TEXT, 'List of clubs')

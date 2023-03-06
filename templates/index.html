@@ -15,8 +15,10 @@
             </ul>
         {% endif %}
     {% endwith %}
-    
-    Please enter your secretary email to continue:
+
+    <a href="{{ url_for('displayClubs') }}">List of clubs</a>
+
+    <br>Please enter your secretary email to continue:
     <form action="showSummary" method="post">
         <label for="email">Email:</label>
         <input type="email" name="email" id=""/>
