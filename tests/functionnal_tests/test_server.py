@@ -43,8 +43,7 @@ class MyTest(LiveServerTestCase):
         book_link = chrome_driver.find_elements(By.LINK_TEXT, 'Book Places')
         book_link[2].click()
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert element.text == 'This is a past event. Please choose a future\
-                                competition.'
+        assert 'This is a past event. Please choose a future' in element.text
 
     def test_login_book_places_success(self):
         self.login('test2@test.co')
@@ -104,8 +103,8 @@ class MyTest(LiveServerTestCase):
         places.send_keys('6')
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert element.text == 'You can\'t purchase more than available \
-            places.'
+        message = 'You can\'t purchase more than available places.'
+        assert element.text == message
 
     def test_login_book_places_success_book_places_no_success_more_than_12_places_in_total(self):
         self.login('test2@test.co')
@@ -130,8 +129,8 @@ class MyTest(LiveServerTestCase):
         places.send_keys('10')
         places.send_keys(Keys.ENTER)
         element = chrome_driver.find_element(By.TAG_NAME, 'li')
-        assert 'You can\'t purchase more than 12 places and you have already\
-            bought' in element.text
+        assert 'You can\'t purchase more than 12 places and you have already' \
+            in element.text
 
     def test_login_view_club_logout_view_club(self):
         self.login('test@test.co')
